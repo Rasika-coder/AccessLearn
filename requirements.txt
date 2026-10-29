@@ -3,3 +3,6 @@ Flask
 pypdf
 google-genai
 python-dotenv
+pypdfium2
+pytesseract
+gunicorn
