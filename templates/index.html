@@ -104,23 +104,6 @@
 
 ```
 
-Make sure you close the button tag as shown, then leave the existing `{% for page in pages %}` line below it.
-
-Add this code at the bottom of `static/script.js`:
-
-<CodeBlock language="javascript" editable>
-const stopReadingButton = document.getElementById("stop-reading");
-
-if (stopReadingButton) {
-    stopReadingButton.addEventListener("click", function () {
-        if ("speechSynthesis" in window) {
-            window.speechSynthesis.cancel();
-        }
-    });
-}
-
-
-        
 <section class="quiz-card">
     <h2>Revision Quiz</h2>
     <p>Test your understanding of the uploaded PDF.</p>
