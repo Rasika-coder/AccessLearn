@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessLearn - Accessible Study Companion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="container">
+        <header>
+            <h1>AccessLearn</h1>
+            <p>Your accessible study companion</p>
+            <p>Upload your study PDF and extract its text page by page.</p>
+        </header>
+
+        <section class="upload-card">
+            <h2>Upload your PDF</h2>
+
+            <form method="POST" enctype="multipart/form-data">
+                <label for="pdf">Choose a PDF file</label>
+                <input type="file" id="pdf" name="pdf" accept=".pdf,application/pdf" required>
+                <button type="submit" id="upload-button">Extract Text</button>
+                <p id="upload-status" role="status" aria-live="polite" hidden>
+    Please wait — extracting text and processing scanned pages...
+</p>
+            </form>
+
+            {% if error %}
+                <p class="error" role="alert">{{ error }}</p>
+            {% endif %}
+        </section>
+
+     
+{% if filename %}
+    <h2>Extracted content: {{ filename }}</h2>
+<p id="page-count">
+    Total pages extracted: {{ pages|length }}
+</p>
+<button type="button" id="download-notes">
+    Download Study Notes
+</button>
+
+<div class="progress-container">
+    <p id="progress-text">Reading progress: 0%</p>
+
+    <div
+        class="progress-track"
+        id="reading-progress"
+        role="progressbar"
+        aria-label="PDF reading progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+    >
+        <div id="progress-fill" class="progress-fill"></div>
+    </div>
+</div>
+
+  
+<section class="search-card">
+    <label for="pdf-search">Search inside your PDF</label>
+    <input
+        type="search"
+        id="pdf-search"
+        placeholder="Enter a word or topic..."
+    >
+    <button type="button" id="clear-search">Clear Search</button>
+    <p id="search-result" aria-live="polite"></p>
+
+    <div class="reading-controls">
+        <h3>Reading preferences</h3>
+        <button type="button" id="decrease-font">A−</button>
+        <button type="button" id="reset-font">Reset</button>
+        <button type="button" id="increase-font">A+</button>
+        
+<button type="button" id="contrast-toggle" aria-pressed="false">
+    High Contrast: Off
+</button>
+
+    </div>
+</section>
+
+{% endif %}
+
+<button type="button" id="stop-reading">Stop Reading</button>
+
+<div class="progress-container">
+    <p id="progress-text">Reading progress: 0%</p>
+    <div
+        class="progress-track"
+        role="progressbar"
+        aria-label="PDF reading progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+        id="reading-progress"
+    >
+        <div id="progress-fill" class="progress-fill"></div>
+    </div>
+</div>
+
+```
+
+Make sure you close the button tag as shown, then leave the existing `{% for page in pages %}` line below it.
+
+Add this code at the bottom of `static/script.js`:
+
+<CodeBlock language="javascript" editable>
+const stopReadingButton = document.getElementById("stop-reading");
+
+if (stopReadingButton) {
+    stopReadingButton.addEventListener("click", function () {
+        if ("speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+        }
+    });
+}
+
+
+        
+<section class="quiz-card">
+    <h2>Revision Quiz</h2>
+    <p>Test your understanding of the uploaded PDF.</p>
+    <button type="button" id="generate-quiz">
+        Generate Quiz
+    </button>
+    <div id="quiz-container" aria-live="polite"></div>
+</section>
+
+{% for page in pages %}
+    <section class="page-card">
+        <h3>Page {{ page.number }}</h3>
+
+        <p class="page-text">{{ page.text }}</p>
+
+        <button
+            type="button"
+            class="speak-button"
+            data-page="{{ page.number }}"
+        >
+            Listen to Page {{ page.number }}
+        </button>
+
+        <button
+            type="button"
+            class="explain-button"
+            data-page="{{ page.number }}"
+        >
+            Explain Simply
+        </button>
+
+        <div
+            class="explanation"
+            id="explanation-{{ page.number }}"
+            aria-live="polite"
+        ></div>
+    </section>
+{% endfor %}
+
+<button type="button" id="back-to-top">
+    Back to Top ↑
+</button>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
