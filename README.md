@@ -90,4 +90,4 @@ Open the local URL displayed in the terminal in your browser.
 
 Developed as a project focused on accessible learning and AI-assisted education.
 
-https://accesslearn-1-jhrx.onrender.com- working link.
+https://accesslearn-1-jhrx.onrender.com                    working link.
