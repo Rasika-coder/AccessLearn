@@ -15,8 +15,11 @@ from io import BytesIO
 from dotenv import load_dotenv
 
 load_dotenv()
-
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"),
+    static_url_path="/static"
+)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
 api_key = os.getenv("GEMINI_API_KEY")
